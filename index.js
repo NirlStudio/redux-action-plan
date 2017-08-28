@@ -6,7 +6,7 @@ function createAction (type, payload) {
     var action = { type: type }
     if (typeof payload === 'string') {
       payload = [payload] // one payload property.
-    } else if (!payload.length) {
+    } else if (!payload || !payload.length) {
       payload = ['payload'] // use 'payload' as the name of only property.
     }
     // take payload as a string array.
@@ -96,17 +96,13 @@ function createReducer (type, handler, initialState) {
 
 // help to map type names to type values.
 var mapTypeNames = Array.prototype.map ? function (names, typeMap) {
-  return !typeMap ? names
-    : names.map(function (name) {
-      return (typeMap && typeMap[name]) || name
-    })
+  return names.map(function (name) {
+    return typeMap[name]
+  })
 } : function (names, typeMap) {
-  if (!typeMap) {
-    return names
-  }
   var types = []
   for (var i = 0; i < names.length; i++) {
-    types.push(typeMap[names[i]] || names[i])
+    types.push(typeMap[names[i]])
   }
   return types
 }
@@ -126,7 +122,7 @@ function createPlanner (typeMap) {
   // create a reducer by a handler with one or more actions by name.
   planner.bind = function (actionName, handler, initialState) {
     if (typeof actionName === 'string') {
-      return bindAction(typeMap[actionName] || actionName, handler, initialState)
+      return bindAction(typeMap[actionName], handler, initialState)
     }
     if (actionName.length) { // unsafe array.
       return bindActions(mapTypeNames(actionName, typeMap), handler, initialState)
@@ -140,7 +136,7 @@ function createPlanner (typeMap) {
     var names = Object.getOwnPropertyNames(handlers)
     var actions = {}
     for (var i = 0; i < names.length; i++) {
-      actions[typeMap[names[i]] || names[i]] = handlers[names[i]]
+      actions[typeMap[names[i]]] = handlers[names[i]]
     }
     return combineActions(actions, initialState)
   }
