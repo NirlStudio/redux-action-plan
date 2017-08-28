@@ -102,6 +102,23 @@ describe('Static Functions', function () {
       assert.equal(action2.payload, p1, 'action2: wrong payload value')
     })
   })
+  describe('nopReducer', function () {
+    it('should create an empty reducer using null as the default inital state.', function () {
+      var state = 'state-value'
+      var nop = plan.nopReducer()
+      assert.equal(typeof nop, 'function', 'nop is not a function')
+      assert.equal(nop(), null, 'initial state is invalid')
+      assert.equal(nop(state), state, 'state is invalid')
+    })
+    it('should create an empty reducer using initialState to supplement a missing state.', function () {
+      var state = 'state-value'
+      var initState = 'init-state'
+      var nop = plan.nopReducer(initState)
+      assert.equal(typeof nop, 'function', 'nop is not a function')
+      assert.equal(nop(), initState, 'initial state is invalid')
+      assert.equal(nop(state), state, 'state is invalid')
+    })
+  })
   describe('bindAction', function () {
     it('should create an empty reducer function w/o handler and initialState.', function () {
       var type = 'type-value'
@@ -264,7 +281,7 @@ describe('Static Functions', function () {
       assert.equal(newState, newStateValue, 'action2: new state is invalid')
 
       newState = reducer(undefined, {type: 'invalid-type'})
-      assert.equal(typeof newState, 'undefined', 'action3: new state is invalid')
+      assert.equal(newState, initState, 'action3: new state is invalid')
     })
   })
   describe('createReducer', function () {
@@ -488,7 +505,24 @@ describe('Action Plan', function () {
       assert.equal(newState2, state2, 'new state2 is invalid')
 
       var newState = reducer(undefined, { type: 'invalid-type' })
-      assert.equal(typeof newState, 'undefined', 'initial state is expected.')
+      assert.equal(newState, initState, 'initial state is expected.')
+    })
+  })
+  describe('actions.nop', function () {
+    it('should create an empty reducer using null as the default inital state.', function () {
+      var state = 'state-value'
+      var nop = actions.nop()
+      assert.equal(typeof nop, 'function', 'nop is not a function')
+      assert.equal(nop(), null, 'initial state is invalid')
+      assert.equal(nop(state), state, 'state is invalid')
+    })
+    it('should create an empty reducer using initialState to supplement a missing state.', function () {
+      var state = 'state-value'
+      var initState = 'init-state'
+      var nop = actions.nop(initState)
+      assert.equal(typeof nop, 'function', 'nop is not a function')
+      assert.equal(nop(), initState, 'initial state is invalid')
+      assert.equal(nop(state), state, 'state is invalid')
     })
   })
 })

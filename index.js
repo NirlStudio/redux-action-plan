@@ -32,8 +32,7 @@ function createActions (typeMap, payloads) {
 }
 
 // reducer creator:
-//  a nop reducer
-
+//  a nop reducer to return the initialState, null or the original state.
 function nopReducer (initialState) {
   if (typeof initialState === 'undefined') {
     initialState = null
@@ -53,11 +52,12 @@ function bindAction (type, handler, initialState) {
       return typeof state === 'undefined' ? null : state
     }
     : handler ? function (state, action) {
-      return action.type === type
-        ? handler(typeof state === 'undefined' ? initialState : state, action)
-        : state
+      if (typeof state === 'undefined') {
+        state = initialState
+      }
+      return action.type === type ? handler(state, action) : state
     } : function (state, action) {
-      return action.type === type && typeof state === 'undefined' ? initialState : state
+      return typeof state === 'undefined' ? initialState : state
     }
 }
 
@@ -67,14 +67,16 @@ function combineActions (actions, initialState) {
   actions = Object.assign(Object.create(null), actions)
   return typeof initialState === 'undefined'
     ? function (state, action) {
+      if (typeof state === 'undefined') {
+        state = null
+      }
       return actions[action.type] ? actions[action.type](state, action) : state
     }
     : function (state, action) {
-      return actions[action.type]
-        ? actions[action.type](
-            typeof state === 'undefined' ? initialState : state, action
-          )
-        : state
+      if (typeof state === 'undefined') {
+        state = initialState
+      }
+      return actions[action.type] ? actions[action.type](state, action) : state
     }
 }
 
