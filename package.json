@@ -1,6 +1,6 @@
 {
   "name": "redux-action-plan",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "A utility library to create redux action creators and reducers.",
   "main": "index.js",
   "scripts": {

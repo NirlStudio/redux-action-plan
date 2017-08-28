@@ -32,13 +32,25 @@ function createActions (typeMap, payloads) {
 }
 
 // reducer creator:
+//  a nop reducer
+
+function nopReducer (initialState) {
+  if (typeof initialState === 'undefined') {
+    initialState = null
+  }
+  return function (state) {
+    return typeof state === 'undefined' ? initialState : state
+  }
+}
+
+// reducer creator:
 //   bind a handler with an action type and an optional initialState
 function bindAction (type, handler, initialState) {
   return typeof initialState === 'undefined'
     ? handler ? function (state, action) {
       return action.type === type ? handler(state, action) : state
-    } : function (state) {
-      return state // an empty state reducer
+    } : function (state) { // an empty state reducer
+      return typeof state === 'undefined' ? null : state
     }
     : handler ? function (state, action) {
       return action.type === type
@@ -70,7 +82,7 @@ function combineActions (actions, initialState) {
 //   bind a handler with multiple action types and an optional initialState
 function bindActions (types, handler, initialState) {
   if (!handler) { // supplement an empty handler.
-    handler = function (state) { return state }
+    handler = nopReducer(initialState)
   }
   var actions = {}
   for (var i = 0; i < types.length; i++) {
@@ -127,7 +139,7 @@ function createPlanner (typeMap) {
     if (actionName.length) { // unsafe array.
       return bindActions(mapTypeNames(actionName, typeMap), handler, initialState)
     }
-    return function (state) { return state } // an empty reducer.
+    // return an undefined to indicate an error
   }
 
   // create a reducer by combine several action handlers.
@@ -150,19 +162,18 @@ function createPlanner (typeMap) {
       : planner.combine(action, handler)
   }
 
-  // create an empty reducer.
-  planner.nop = function () {
-    return function (state) {
-      return state
-    }
-  }
+  // create an alias for static nopReducer.
+  planner.nop = nopReducer
 
   return planner
 }
 
 // publish static functions to the default function.
+// action-creator builders
 createPlanner.createAction = createAction
 createPlanner.createActions = createActions
+// reducer builders
+createPlanner.nopReducer = nopReducer
 createPlanner.bindAction = bindAction
 createPlanner.bindActions = bindActions
 createPlanner.combineActions = combineActions

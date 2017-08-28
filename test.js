@@ -17,6 +17,9 @@ describe('module', function () {
     it('should have function bindAction.', function () {
       assert.equal(typeof plan.bindAction, 'function')
     })
+    it('should have function nopReducer.', function () {
+      assert.equal(typeof plan.nopReducer, 'function')
+    })
     it('should have function bindActions.', function () {
       assert.equal(typeof plan.bindActions, 'function')
     })
