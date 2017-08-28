@@ -1,0 +1,34 @@
+{
+  "name": "redux-action-plan",
+  "version": "0.1.0",
+  "description": "A utility library to create redux action creators and reducers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NirlStudio/redux-action-plan.git"
+  },
+  "keywords": [
+    "react",
+    "redux",
+    "action",
+    "reducer"
+  ],
+  "author": "Leevi Li",
+  "license": "BSD-2-Clause",
+  "standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  },
+  "bugs": {
+    "url": "https://github.com/NirlStudio/redux-action-plan/issues"
+  },
+  "homepage": "https://github.com/NirlStudio/redux-action-plan#readme",
+  "devDependencies": {
+    "mocha": "^3.5.0"
+  }
+}
