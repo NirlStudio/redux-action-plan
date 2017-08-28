@@ -150,6 +150,13 @@ function createPlanner (typeMap) {
       : planner.combine(action, handler)
   }
 
+  // create an empty reducer.
+  planner.nop = function () {
+    return function (state) {
+      return state
+    }
+  }
+
   return planner
 }
 

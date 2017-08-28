@@ -351,6 +351,7 @@ describe('Action Plan', function () {
       assert.equal(typeof actions.bind, 'function', 'actions.bind is not a function')
       assert.equal(typeof actions.combine, 'function', 'actions.combine is not a function')
       assert.equal(typeof actions.reducer, 'function', 'actions.reducer is not a function')
+      assert.equal(typeof actions.nop, 'function', 'actions.nop is not a function')
 
       var Actions = actions()
       assert.equal(typeof Actions, 'object', 'Actions is not an object.')
