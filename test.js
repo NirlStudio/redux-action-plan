@@ -108,6 +108,7 @@ describe('Static Functions', function () {
       var nop = plan.nopReducer()
       assert.equal(typeof nop, 'function', 'nop is not a function')
       assert.equal(nop(), null, 'initial state is invalid')
+      assert.notEqual(typeof nop(), 'undefined', 'initial state is invalid')
       assert.equal(nop(state), state, 'state is invalid')
     })
     it('should create an empty reducer using initialState to supplement a missing state.', function () {
@@ -145,6 +146,11 @@ describe('Static Functions', function () {
 
       newState = reducer(state, { type: 'invalid-type' })
       assert.equal(newState, state, 'original state is expected.')
+
+      newState = reducer(undefined, { type: 'invalid-type' })
+      console.log('newState is ', newState)
+      assert.notEqual(typeof newState, 'undefined', 'newState is undefined.')
+      assert.equal(newState, null, 'null is expected.')
     })
     it('should create a reducer function w/ a handler and provide initialState if action matched.', function () {
       var type = 'type-value'
@@ -401,6 +407,10 @@ describe('Action Plan', function () {
 
       newState = reducer(state, { type: type2 })
       assert.equal(newState, state, 'original state is expected.')
+
+      newState = reducer(undefined, { type: type2 })
+      assert.notEqual(typeof newState, 'undefined', 'newState is undefined.')
+      assert.equal(newState, null, 'null is expected.')
     })
     it('should create a reducer function for an array of action names and a handler.', function () {
       var reducer = actions.bind(['action1', 'action2'], function (s, a) {
@@ -418,6 +428,10 @@ describe('Action Plan', function () {
 
       newState = reducer(state, {type: 'invalid-type'})
       assert.equal(newState, state, 'action3: new state is invalid')
+
+      newState = reducer(undefined, {type: 'invalid-type'})
+      assert.notEqual(typeof newState, 'undefined', 'newState is undefined.')
+      assert.equal(newState, null, 'null is expected')
     })
   })
   describe('actions.combine', function () {
@@ -514,6 +528,7 @@ describe('Action Plan', function () {
       var nop = actions.nop()
       assert.equal(typeof nop, 'function', 'nop is not a function')
       assert.equal(nop(), null, 'initial state is invalid')
+      assert.notEqual(typeof nop(), 'undefined', 'initial state is undefined')
       assert.equal(nop(state), state, 'state is invalid')
     })
     it('should create an empty reducer using initialState to supplement a missing state.', function () {

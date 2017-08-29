@@ -47,6 +47,9 @@ function nopReducer (initialState) {
 function bindAction (type, handler, initialState) {
   return typeof initialState === 'undefined'
     ? handler ? function (state, action) {
+      if (typeof state === 'undefined') {
+        state = null
+      }
       return action.type === type ? handler(state, action) : state
     } : function (state) { // an empty state reducer
       return typeof state === 'undefined' ? null : state
