@@ -2,13 +2,13 @@
 
 // make an action creator for an action type.
 function createAction (type, payload) {
+  if (typeof payload === 'string') {
+    payload = [payload] // one payload property.
+  } else if (!payload || !payload.length) {
+    payload = ['payload'] // use 'payload' as the name of only property.
+  }
   return function () {
     var action = { type: type }
-    if (typeof payload === 'string') {
-      payload = [payload] // one payload property.
-    } else if (!payload || !payload.length) {
-      payload = ['payload'] // use 'payload' as the name of only property.
-    }
     // take payload as a string array.
     for (var i = 0; i < payload.length && i < arguments.length; i++) {
       action[payload[i]] = arguments[i]
@@ -86,7 +86,7 @@ function combineActions (actions, initialState) {
 // reducer creator:
 //   bind a handler with multiple action types and an optional initialState
 function bindActions (types, handler, initialState) {
-  if (!handler) { // supplement an empty handler.
+  if (!types || !types.length || !handler) { // supplement an empty handler.
     handler = nopReducer(initialState)
   }
   var actions = {}
@@ -144,7 +144,8 @@ function createPlanner (typeMap) {
     if (actionName.length) { // unsafe array.
       return bindActions(mapTypeNames(actionName, typeMap), handler, initialState)
     }
-    // return an undefined to indicate an error
+    // fallback to an nop reducer
+    return nopReducer(initialState)
   }
 
   // create a reducer by combine several action handlers.
