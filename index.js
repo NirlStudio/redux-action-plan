@@ -19,14 +19,26 @@ function createAction (type, payload) {
 
 // create action creators for a group of types and their payload definition.
 function createActions (typeMap, payloads) {
+  // static actions
   var names = Object.getOwnPropertyNames(typeMap)
   if (!payloads) {
     payloads = Object.create(null)
   }
   var actions = Object.create(null)
-  for (var i = 0; i < names.length; i++) {
-    var name = names[i]
-    actions[name] = createAction(typeMap[name], payloads[name])
+  var i, name
+  for (i = 0; i < names.length; i++) {
+    name = names[i]
+    actions[name] = typeof payloads[name] === 'function'
+      ? payloads[name] // a customized action creator
+      : createAction(typeMap[name], payloads[name])
+  }
+  // find possible dynamic actions
+  names = Object.getOwnPropertyNames(payloads)
+  for (i = 0; i < names.length; i++) {
+    name = names[i]
+    if (!actions[name] && typeof payloads[name] === 'function') {
+      actions[name] = payloads[name]
+    }
   }
   return actions
 }

@@ -83,10 +83,15 @@ describe('Static Functions', function () {
       var type2 = 'type-value2'
       var p1 = 'payload1'
       var p2 = 'payload2'
+      var a3 = function () {
+        return function () {} // a thunk
+      }
 
       var actions = plan.createActions({
         action1: type1,
         action2: type2
+      }, {
+        action3: a3
       })
       assert.equal(typeof actions.action1, 'function', 'creator 1 is not a function.')
       assert.equal(typeof actions.action2, 'function', 'creator 2 is not a function.')
@@ -100,6 +105,8 @@ describe('Static Functions', function () {
       assert.equal(typeof action2, 'object', 'action2 is not a object')
       assert.equal(action2.type, type2, 'action2: wrong type value')
       assert.equal(action2.payload, p1, 'action2: wrong payload value')
+
+      assert.equal(actions.action3, a3, 'action3: the creator is invalid.')
     })
   })
   describe('nopReducer', function () {
