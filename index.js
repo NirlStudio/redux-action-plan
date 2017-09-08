@@ -62,7 +62,7 @@ function bindAction (type, handler, initialState) {
       if (typeof state === 'undefined') {
         state = null
       }
-      return action.type === type ? handler(state, action) : state
+      return action && action.type === type ? handler(state, action) : state
     } : function (state) { // an empty state reducer
       return typeof state === 'undefined' ? null : state
     }
@@ -70,7 +70,7 @@ function bindAction (type, handler, initialState) {
       if (typeof state === 'undefined') {
         state = initialState
       }
-      return action.type === type ? handler(state, action) : state
+      return action && action.type === type ? handler(state, action) : state
     } : function (state, action) {
       return typeof state === 'undefined' ? initialState : state
     }
@@ -85,13 +85,13 @@ function combineActions (actions, initialState) {
       if (typeof state === 'undefined') {
         state = null
       }
-      return actions[action.type] ? actions[action.type](state, action) : state
+      return action && actions[action.type] ? actions[action.type](state, action) : state
     }
     : function (state, action) {
       if (typeof state === 'undefined') {
         state = initialState
       }
-      return actions[action.type] ? actions[action.type](state, action) : state
+      return action && actions[action.type] ? actions[action.type](state, action) : state
     }
 }
 
